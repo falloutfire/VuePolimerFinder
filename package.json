@@ -14,7 +14,7 @@
     "connect-history-api-fallback": "^1.6.0",
     "core-js": "^2.6.5",
     "express": "^4.16.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "material-design-icons-iconfont": "^4.0.5",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
