@@ -37,62 +37,14 @@
             </v-navigation-drawer>
 
             <v-layout row>
-                <v-flex v-if="currentTable" xs9 pa-1 class="pt-5">
+                <v-flex v-if="currentTable" xs12 pa-1 class="pt-5">
                     <crud-table
                             :key="currentTable.tableName"
                             v-bind="currentTable"
                     ></crud-table>
                 </v-flex>
                 <v-divider></v-divider>
-                <v-flex xs3 class="pt-5 mt-4 mb-1" pa-1>
-                    <v-card dark tile color="white" height="100%">
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline" style="color:blue;">SERVER STATS</h3>
-                            </div>
-                            <v-container>
 
-                                <section v-if="errored">
-                                    <p>We're not able to retrieve this information at the moment, please try back
-                                        later</p>
-                                </section>
-
-                                <section v-else>
-                                    <div v-if="loading">Loading...</div>
-
-                                    <div v-else>
-                                        <div>
-                                            <span style="color:blue;font-weight:bold">SERVER : </span>
-                                            <span style="color:blue"> {{ info.status }}</span>
-                                            <br><br>
-                                            <span class="lighten">
-                                                <span style="color:blue;font-weight:bold">DATABASE : </span>
-                                                <span style="color:blue;" v-html="info.details.db.status"></span>
-                                                <br>
-                                                <span style="color:blue;font-weight:bold">DATABASE NAME : </span>
-                                                <span style="color:blue;"
-                                                      v-html="info.details.db.details.database"></span>
-                                                <br><br>
-                                                <span style="color:blue;font-weight:bold">DISK SPACE </span>
-                                                <div v-for="(item, index) in info.details.diskSpace.details">
-                                                    <span style="color:blue;">
-                                                        <span style="color:blue;font-weight:bold">
-                                                            {{index}}</span>: {{computeData(item)}} Mbyte</span>
-
-                                                </div>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </section>
-
-                            </v-container>
-                        </v-card-title>
-
-                        <v-card-text>
-
-                        </v-card-text>
-                    </v-card>
-                </v-flex>
             </v-layout>
         </v-layout>
     </v-app>

@@ -14,9 +14,7 @@
                                   :label="filteredName" clearable></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-btn v-if="create" color="primary" dark class="mb-2" @click="createDialog = true">Добавить {{
-                    tableNameRus }}
-                </v-btn>
+                <v-btn v-if="create" color="primary" dark class="mb-2" @click="createDialog = true">Добавить {{tableNameRus }}</v-btn>
                 <v-dialog v-model="deleteDialog" max-width="500px">
                     <v-card>
                         <v-card-title>
@@ -63,12 +61,37 @@
             </v-snackbar>
         </v-flex>
         <v-flex xs12>
+            <router-view></router-view>
+            <polymer-detail
+                    :crud-u-r-l="crudURL"
+                    :item-name="editedItem.fullName"
+                    v-if="editPolymerDialog"
+                    :item-id="editedItem.id"
+                    :value="editedItem"
+                    v-model="editedItem"
+                    :fieldsDescription="itemsDescription"
+                    @close="editPolymerDialog = $event"
+                    @apply="edit"
+            ></polymer-detail>
+            <polymer-detail
+                    :crud-u-r-l="crudURL"
+                    :item-name="createdItem.fullName"
+                    v-if="createPolymerDialog"
+                    :value="createdItem"
+                    v-model="createdItem"
+                    :fieldsDescription="itemsDescription"
+                    :saveLoading="createLoading"
+                    @close="createPolymerDialog = $event"
+                    @apply="edit"
+            ></polymer-detail>
             <v-data-table
+                    v-if="showTable"
                     :headers="headers"
                     :items="filteredItems"
                     :loading="itemsLoading"
                     class="elevation-1">
                 <template v-slot:items="props">
+                    <tr @click="editItem(props.item)">
                     <template v-for="[key, descr] in Object.entries(itemsDescription)">
                         <td
                                 :key="key"
@@ -89,17 +112,12 @@
                         <v-icon
                                 small
                                 class="mr-2"
-                                @click="editItem(props.item)"
-                        >
-                            edit
-                        </v-icon>
+                                @click="editItem(props.item)">edit</v-icon>
                         <v-icon
                                 small
-                                @click="deleteItem(props.item)"
-                        >
-                            delete
-                        </v-icon>
+                                @click="deleteItem(props.item)">delete</v-icon>
                     </td>
+                    </tr>
                 </template>
             </v-data-table>
         </v-flex>
@@ -109,11 +127,12 @@
 <script>
     import HTTP from '../http';
     import EditDialog from './EditTable';
+    import PolymerDetail from './PolymerDetail';
     import lodash from 'lodash';
 
     export default {
         name: "CrudTable",
-        components: {EditDialog},
+        components: {EditDialog, PolymerDetail},
         props: {
             tableNameRus: String,
             tableName: String,
@@ -134,6 +153,9 @@
                 itemsLoading: false,
                 items: [],
                 editDialog: false,
+                showTable: true,
+                editPolymerDialog: false,
+                createPolymerDialog: false,
                 createDialog: false,
                 deleteDialog: false,
                 createLoading: false,
@@ -224,7 +246,12 @@
             },
             editItem(item) {
                 this.editedItem = item;
-                this.editDialog = true;
+                if (this.crudURL === "polymers") {
+                    this.showTable = false;
+                    this.editPolymerDialog = true;
+                } else {
+                    this.editDialog = true;
+                }
             },
             deleteItem(item) {
                 this.deletedItem = item;

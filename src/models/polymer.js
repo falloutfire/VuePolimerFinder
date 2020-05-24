@@ -3,14 +3,14 @@ export const defaultPolymer = {
     fullName: "",
     shortName: "",
     casNumber: "",
-    methodSynthesis: "",
     densityMin: 0.0,
     densityMax: 0.0,
     meltMin: 0,
     meltMax: 0,
     maxServiceTemp: 0,
     color: "",
-    monomersStructure: ""
+    //monomersStructure: "",
+    methodSynthesis: "",
 };
 
 export const polymerDescription = {
@@ -48,10 +48,9 @@ export const polymerDescription = {
         label: 'CAS',
     },
     methodSynthesis: {
-        descriptionFieldType: 'textField',
+        descriptionFieldType: 'textArea',
         flexValues: {
-            xs12: true,
-            sm6: true,
+            xs12: true
         },
         label: 'Метод синтеза',
         showInTable: false,
@@ -110,7 +109,7 @@ export const polymerDescription = {
         label: 'Цвет',
         showInTable: false,
     },
-    monomersStructure: {
+    /*monomersStructure: {
         descriptionFieldType: 'textField',
         flexValues: {
             xs12: true,
@@ -118,7 +117,7 @@ export const polymerDescription = {
         },
         label: 'Структура мономера',
         showInTable: false,
-    },
+    },*/
     blends: {
         descriptionFieldType: 'tableView',
         label: 'Совместимость',

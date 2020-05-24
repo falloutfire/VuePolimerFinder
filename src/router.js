@@ -48,9 +48,15 @@ export default new Router({
 
         },
         {
-            path: "/admin",
+            path: "/panel",
             name: "panel",
             component: () => import('./components/Panel.vue')
+        },
+        {
+            path: "/polymer/:itemId",
+            name: "polymer",
+            props: true,
+            component: () => import('./components/PolymerDetail.vue')
         },
         {
             path: '*',
