@@ -2,7 +2,7 @@
     <v-app id="app">
         <!--<v-content>-->
             <!--<v-container fluid fill-height>-->
-                <router-view></router-view>
+                <router-view name="asd"></router-view>
             <!--</v-container>-->
         <!--</v-content>-->
     </v-app>

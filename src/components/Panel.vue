@@ -5,7 +5,7 @@
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <v-toolbar-title class="headline text-uppercase">
                     <span>Klöckner </span>
-                    <span class="font-weight-light">ADMIN PANEL</span>
+                    <span class="font-weight-light">FIND POLYMERS</span>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -37,7 +37,8 @@
             </v-navigation-drawer>
 
             <v-layout row>
-                <v-flex v-if="currentTable" xs12 pa-1 class="pt-5">
+
+                <v-flex v-if="currentTable" xs12 pa-1 class="pt-6">
                     <crud-table
                             :key="currentTable.tableName"
                             v-bind="currentTable"
@@ -122,6 +123,7 @@
                 this.drawer = !this.drawer;
                 this.currentTableName = tableName;
             },
+
             loadData() {
                 axios
                     .get('https://test-spring-boom.herokuapp.com/actuator/health')

@@ -1,7 +1,7 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 class="mt-3">
-            <v-toolbar flat color="white">
+        <v-flex xs12 class="mt-5 pt-3">
+            <v-toolbar v-if="showTable" flat color="white">
                 <v-toolbar-title>{{ tableName }}</v-toolbar-title>
                 <v-divider
                         class="mx-2"
@@ -14,7 +14,9 @@
                                   :label="filteredName" clearable></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-btn v-if="create" color="primary" dark class="mb-2" @click="createDialog = true">Добавить {{tableNameRus }}</v-btn>
+                <v-btn v-if="create" color="primary" dark class="mb-2" @click="createDialog = true">Добавить
+                    {{tableNameRus }}
+                </v-btn>
                 <v-dialog v-model="deleteDialog" max-width="500px">
                     <v-card>
                         <v-card-title>
@@ -55,72 +57,86 @@
                     v-model="snackbar"
                     :color="snackbarColor"
                     :multi-line="true"
-                    :timeout="3000"
-            >
+                    :timeout="3000">
                 {{ snackbarText }}
             </v-snackbar>
         </v-flex>
-        <v-flex xs12>
-            <router-view></router-view>
-            <polymer-detail
-                    :crud-u-r-l="crudURL"
-                    :item-name="editedItem.fullName"
-                    v-if="editPolymerDialog"
-                    :item-id="editedItem.id"
-                    :value="editedItem"
-                    v-model="editedItem"
-                    :fieldsDescription="itemsDescription"
-                    @close="editPolymerDialog = $event"
-                    @apply="edit"
-            ></polymer-detail>
-            <polymer-detail
-                    :crud-u-r-l="crudURL"
-                    :item-name="createdItem.fullName"
-                    v-if="createPolymerDialog"
-                    :value="createdItem"
-                    v-model="createdItem"
-                    :fieldsDescription="itemsDescription"
-                    :saveLoading="createLoading"
-                    @close="createPolymerDialog = $event"
-                    @apply="edit"
-            ></polymer-detail>
-            <v-data-table
-                    v-if="showTable"
-                    :headers="headers"
-                    :items="filteredItems"
-                    :loading="itemsLoading"
-                    class="elevation-1">
-                <template v-slot:items="props">
-                    <tr @click="editItem(props.item)">
-                    <template v-for="[key, descr] in Object.entries(itemsDescription)">
-                        <td
-                                :key="key"
-                                v-if="(descr['showInTable'] !== undefined ? descr['showInTable'] : true)
+        <v-layout row>
+            <v-flex xs6 pa-1 class="pt-1">
+                <!---->
+                <router-view name="table"></router-view>
+                <v-data-table
+                        v-if="showTable"
+                        :headers="headers"
+                        :items="filteredItems"
+                        :loading="itemsLoading"
+                        class="elevation-1">
+                    <template v-slot:items="props">
+                        <tr @click="editItem(props.item)">
+                            <template v-for="[key, descr] in Object.entries(itemsDescription)">
+                                <td
+                                        :key="key"
+                                        v-if="(descr['showInTable'] !== undefined ? descr['showInTable'] : true)
                                  && descr['descriptionFieldType'] !== 'checkBox'"
-                        > {{ getValues(props.item[key], descr) }}
-                        </td>
-                        <td :key="key" v-if="descr['descriptionFieldType'] === 'checkBox'">
-                            <v-checkbox
-                                    v-model="props.item[key]"
-                                    primary
-                                    hide-details
-                            ></v-checkbox>
-                        </td>
+                                > {{ getValues(props.item[key], descr) }}
+                                </td>
+                                <td :key="key" v-if="descr['descriptionFieldType'] === 'checkBox'">
+                                    <v-checkbox
+                                            v-model="props.item[key]"
+                                            primary
+                                            hide-details
+                                    ></v-checkbox>
+                                </td>
 
+                            </template>
+                            <td class="justify-center layout px-0">
+                                <v-icon
+                                        small
+                                        class="mr-2"
+                                        @click="editItem(props.item)">edit
+                                </v-icon>
+                                <v-icon
+                                        small
+                                        @click="deleteItem(props.item)">delete
+                                </v-icon>
+                            </td>
+                        </tr>
                     </template>
-                    <td class="justify-center layout px-0">
-                        <v-icon
-                                small
-                                class="mr-2"
-                                @click="editItem(props.item)">edit</v-icon>
-                        <v-icon
-                                small
-                                @click="deleteItem(props.item)">delete</v-icon>
-                    </td>
-                    </tr>
-                </template>
-            </v-data-table>
-        </v-flex>
+                </v-data-table>
+            </v-flex>
+            <v-divider></v-divider>
+            <v-flex xs6 class="pt-1 mb-1" pa-1>
+                <polymer-detail
+                        :crud-u-r-l="crudURL"
+                        :item-name="editedItem.fullName"
+                        v-if="editPolymerDialog"
+                        :item-id="editedItem.id"
+                        :value="editedItem"
+                        v-model="editedItem"
+                        :fieldsDescription="itemsDescription"
+                        :default-item="defaultItem"
+                        :items-description="itemsDescription"
+                        :items-show="false"
+                        @close="editPolymerDialog = $event"
+                        @apply="edit"
+                ></polymer-detail>
+                <polymer-detail
+                        :crud-u-r-l="crudURL"
+                        :item-name="createdItem.fullName"
+                        v-if="createPolymerDialog"
+                        :value="createdItem"
+                        v-model="createdItem"
+                        :fieldsDescription="itemsDescription"
+                        :default-item="defaultItem"
+                        :items-description="itemsDescription"
+                        :saveLoading="createLoading"
+                        :items-show="false"
+                        @close="createPolymerDialog = $event"
+                        @apply="edit"
+                ></polymer-detail>
+            </v-flex>
+        </v-layout>
+
     </v-layout>
 </template>
 
@@ -218,15 +234,18 @@
             },
             edit() {
                 this.editLoading = true;
+                console.log(this.editedItem)
                 HTTP.put(`${this.crudURL}`, this.editedItem).then(() => {
                     this.editLoading = false;
                     this.editedItem = lodash.cloneDeep(this.defaultItem);
                     this.editDialog = false;
+                    this.editPolymerDialog = false;
                     this.success();
                 }).catch(error => {
                     this.editLoading = false;
                     this.editedItem = lodash.cloneDeep(this.defaultItem);
                     this.editDialog = false;
+                    this.editPolymerDialog = false;
                     this.error(error);
                 })
             },
@@ -244,11 +263,18 @@
                     this.error(error);
                 })
             },
+            goBack() {
+                this.showTable = true;
+                this.editPolymerDialog = false;
+                this.createPolymerDialog = false;
+            },
             editItem(item) {
                 this.editedItem = item;
                 if (this.crudURL === "polymers") {
-                    this.showTable = false;
+                    //this.showTable = false;
                     this.editPolymerDialog = true;
+                    //this.createPolymerDialog = false;
+                    //this.$router.push({name: 'Polymer', params: {itemId: item.id, itemName: "psadadadas"}})
                 } else {
                     this.editDialog = true;
                 }
@@ -269,6 +295,16 @@
                     this.error(error);
                 })
             },
+            createPolymer() {
+                if (this.crudURL === "polymers") {
+                    //this.showTable = false;
+                    this.editPolymerDialog = false;
+                    this.createPolymerDialog = true;
+                    //this.$router.push({name: 'Polymer', params: {itemId: item.id, itemName: "psadadadas"}})
+                } else {
+                    this.editDialog = true;
+                }
+            },
             updateItems() {
                 this.deletedItem = lodash.cloneDeep(this.defaultItem);
                 this.editedItem = lodash.cloneDeep(this.defaultItem);
@@ -281,9 +317,10 @@
                     this.itemsLoading = false;
                     this.error(error);
                 });
-            },
+            }
         },
         mounted() {
+            this.goBack();
             this.updateItems();
         }
     }

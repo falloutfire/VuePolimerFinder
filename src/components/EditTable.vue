@@ -52,7 +52,7 @@
                                     v-model="value[key]"
                                     v-bind="descr"
                             ></v-checkbox>
-                            <v-data-table
+                           <!-- <v-data-table
                                     v-if="descr['descriptionFieldType'] === 'tableView'"
                                     :headers="headers"
                                     :items="updateItems"
@@ -83,7 +83,7 @@
                                         </v-icon>
                                     </td>
                                 </template>
-                            </v-data-table>
+                            </v-data-table>-->
                         </v-flex>
                     </v-layout>
                 </v-container>

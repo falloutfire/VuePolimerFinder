@@ -2,6 +2,11 @@ import Router from 'vue-router'
 import Vue from "vue";
 import store from './store'
 import HTTP from './http';
+import TestFirst from "./components/TestFirst";
+import TestSecond from "./components/TestSecond";
+import Panel from "./components/Panel";
+import PolymerDetail from "./components/PolymerDetail";
+import CrudTable from "./components/CrudTable";
 
 Vue.use(Router)
 
@@ -19,6 +24,7 @@ export default new Router({
         {
             path: '/',
             name: 'root',
+
             redirect: () => {
                 if (store.state.refreshToken) {
                     const formData = new FormData();
@@ -50,14 +56,33 @@ export default new Router({
         {
             path: "/panel",
             name: "panel",
-            component: () => import('./components/Panel.vue')
+            components: {
+                asd: Panel
+            },
+            children: [
+                {
+                    path: 'polymer',
+                    name: "PolymerTable",
+                    props: true,
+                    components: {
+                        test: CrudTable
+                    }
+                },
+                {
+                    path: 'polymer/:itemId',
+                    name: "Polymer",
+                    props: true,
+                    components: {
+                        table: PolymerDetail
+                    }
+                }]
         },
-        {
-            path: "/polymer/:itemId",
+       /*{
+            path: "/panel/:itemId",
             name: "polymer",
             props: true,
             component: () => import('./components/PolymerDetail.vue')
-        },
+        },*/
         {
             path: '*',
             name: "not_found",
